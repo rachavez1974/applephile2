@@ -1,0 +1,13 @@
+Introduction: The following gem will responsible for scraping 
+
+1. Interface logic.
+  a. Welcome user to gem by stating that gem can scrape craigslist "Craigslist Collector".
+  b. Ask user for input on which state site they want to scrape.
+    I. List five columns of 10 states each, and ask user to enter a number for the state.
+      i. Scrape https://www.craigslist.org/about/sites and present states to user. Scrape states and city at the same time. 
+  c. Take input from user of state and display the cities pertaining to that particular state.
+    I. Provide a previous option in case user types wrong state.
+  d. Once city has been input, ask user for key words for scraping such as: "new iphone, brand new iphone"
+
+  states = { :alabama => ["Sain city", "hamburg"],
+             :arizona => ["Phoenix", "Tulsa"]}
