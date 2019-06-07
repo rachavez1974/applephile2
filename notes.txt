@@ -1,13 +1,22 @@
-Introduction: The following gem will responsible for scraping 
+I. Introduction: The following gem will responsible for scraping the craigslist website for items that are new.  The user can pick a state, city, and enter keywords for program to scrape.  Subsequently, the program will list a report of the ads on craigslist that meet the criteria specified by user. The gem will display information about an item based on available attributes such as name, , description, price if any, link to look up ad, and condition. The gem main classes will be Scraper, Item, and City.
 
-1. Interface logic.
-  a. Welcome user to gem by stating that gem can scrape craigslist "Craigslist Collector".
-  b. Ask user for input on which state site they want to scrape.
-    I. List five columns of 10 states each, and ask user to enter a number for the state.
-      i. Scrape https://www.craigslist.org/about/sites and present states to user. Scrape states and city at the same time. 
-  c. Take input from user of state and display the cities pertaining to that particular state.
-    I. Provide a previous option in case user types wrong state.
-  d. Once city has been input, ask user for key words for scraping such as: "new iphone, brand new iphone"
 
-  states = { :alabama => ["Sain city", "hamburg"],
-             :arizona => ["Phoenix", "Tulsa"]}
+II. CLI
+  1. Interface logic.
+    a. Welcome user to gem by stating that gem can scrape craigslist "Craigslist Collector".
+    b. Ask user for input on which state site they want to scrape.
+      i. List five columns of 10 states each, and ask user to enter a number for the state.
+    c. Take input from user of state and display the cities pertaining to that particular state.
+      i. Provide a previous option in case user types wrong state.
+    d. Once city has been input, ask user for key words for scraping such as: "new iphone, brand new iphone"
+    e. Display a list of items specified by name, description, price if any, link to look up ad, and condition if available, 
+    f. Ask user if it wants to do another search.
+
+2. Classes needed. 
+  1. Scraper class.
+    a. Scrape https://www.craigslist.org/about/sites and present states to user. Scrape states and city at the same time. It will scrape for links to the cities, then use those links to visit those pages. It will then use Mechanize gem to fill in search form, once the form returns the list of items, it will then scrape for all the links that contain either new or brand new item in their link or in their title. If matches are found, it will then save those links to be visit and gather information from their page. The Scraper class has many items, and it has many cities through items. 
+  2. Item class.
+    iItem class will have item's name, city_name, price, condition, and description, and link that displays the item. Item belongs to both the Scraper class, and the City class.
+  3. City class has many items, and has many scrapes through items.
+
+III. 

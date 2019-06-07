@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "collector"
+# require "bundler/setup"
+# require "collector"
+#require_relative "../lib/command_line_interface.rb"
+require_relative '../config/environment'
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
@@ -10,5 +12,6 @@ require "collector"
 # require "pry"
 # Pry.start
 
-require "irb"
-IRB.start(__FILE__)
+# require "irb"
+# IRB.start(__FILE__)
+CLI.new.run
