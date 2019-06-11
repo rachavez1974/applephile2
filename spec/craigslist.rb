@@ -5,7 +5,7 @@ RSpec.describe "CraigsList" do
   let!(:cl_first) {CraigsList.new()}
 
   after(:each) do 
-    CraigsListScraper.class_variable_set(:@@all, [])
+    CraigsList.class_variable_set(:@@all, [])
   end
   describe "#initialize" do
     it "it has default values" do
