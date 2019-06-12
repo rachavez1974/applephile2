@@ -32,7 +32,11 @@ RSpec.describe "CraigsList" do
                                                   {"clovis"=>"https://clovis.craigslist.org/"},
                                                   {"farmington"=>"https://farmington.craigslist.org/"}]
                                     }
-                                 }    
+                                 }  
+  let!(:p_hash) { { :url=>"https://amarillo.craigslist.org/mob/d/amarillo-iphone-8-plus-256gb-gold-unlock/6906496735.html", 
+                    :price=>"650", 
+                    :description=>"Iphone 8 plus 256gb gold (unlock)"}
+                }  
 
   def choose_random_state
     state_names[rand(0..state_names.length - 1)]
@@ -88,8 +92,17 @@ RSpec.describe "CraigsList" do
 
   describe "#return_city_link" do
     it "it returns the link of a specific city when sent a state name or city" do
-      city_link = cl_first.return_city_link("New Mexico", "albuquerque")
-      expect(city_link).to eq("https://albuquerque.craigslist.org/")
+      city_url = cl_first.return_city_link("New Mexico", "albuquerque")
+      expect(city_url).to eq("https://albuquerque.craigslist.org/")
+    end
+  end
+describe "# scrape_by_city_url" do
+    it "it returns an array of hashes, each hash has info about a particular phone for ex. description,
+        price, and link where user can check it out online" do
+        city_url = cl_first.return_city_link("New Mexico", "clovis") 
+        phone_hash = cl_first.scrape_by_city_url(city_url)
+        first_phone = phone_hash.first
+        expect(first_phone).to eq(p_hash)
     end
   end
 
