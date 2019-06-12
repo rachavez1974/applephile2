@@ -85,6 +85,15 @@ RSpec.describe "CraigsList" do
     expect(links[:"New Mexico"][2]).to include(states_cities_links_data[:"New Mexico"][2])
     end
   end
+
+  describe "#return_city_link" do
+    it "it returns the link of a specific city when sent a state name or city" do
+      city_link = cl_first.return_city_link("New Mexico", "albuquerque")
+      expect(city_link).to eq("https://albuquerque.craigslist.org/")
+    end
+  end
+
+
 end
 
 

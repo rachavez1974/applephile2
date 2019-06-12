@@ -34,6 +34,24 @@ class CraigsList
     state_cities_array.flatten!  
   end
 
+  def return_city_link(state, city)
+    #it returns the link of a particular city
+    #1. find state hash
+    #2. find the city
+    #3. get city's link
+    city_url = ""
+    states_cities_links.find do |key, value|  
+      if key.to_s == state
+        value.find do |city_hash|
+           if city_hash.has_key?(city) 
+            city_url = city_hash[city]
+           end
+         end
+      end
+    end
+    city_url
+  end
+
 
   private
 
@@ -67,6 +85,7 @@ class CraigsList
 
 end
 
-cl1 = CraigsList.new
-puts cl1.get_state_cities("New Mexico")
+# cl1 = CraigsList.new
+# puts cl1.get_state_cities("New Mexico")
+# puts cl1.return_city_link("New Mexico", "clovis")
 
