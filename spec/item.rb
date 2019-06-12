@@ -1,5 +1,4 @@
 require "spec_helper"
-require_relative "../lib/craigslist.rb"
 require_relative "../lib/item.rb"
 
 
