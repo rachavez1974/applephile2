@@ -107,9 +107,3 @@ class CraigsList
 
 end
 
-cl1 = CraigsList.new
-# puts cl1.get_state_cities("New Mexico")
-# city_url = cl1.return_city_link("New Mexico", "clovis")
-# p_hash = cl1.scrape_by_city_url(city_url)
-# puts p_hash.first
-
