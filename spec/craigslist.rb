@@ -5,29 +5,44 @@ require_relative "../lib/craigslist.rb"
 RSpec.describe "CraigsList" do                  
   let!(:cl_first) {CraigsList.new()}
   let!(:state_names) { 
-                  ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California',
+                  ['Alabama','Alaska','Arizona','Arkansas','California',
                   'Colorado','Connecticut','Delaware','District of Columbia','Florida',
-                  'Georgia','Guam','Hawaii',
+                  'Georgia','Hawaii',
                   'Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana',
                   'Maine','Marshall Islands','Maryland','Massachusetts','Michigan',
                   'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada',
                   'New Hampshire','New Jersey','New Mexico','New York','North Carolina',
-                  'North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon',
+                  'North Dakota','Ohio','Oklahoma','Oregon',
                   'Palau','Pennsylvania','Rhode Island','South Carolina',
-                  'South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island',
+                  'South Dakota','Tennessee','Texas','Utah','Vermont',
                   'Virginia','Washington','West Virginia','Wisconsin','Wyoming']
                 }
+
+  let!(:cities_and_links_data) { [{"auburn" =>"https://auburn.craigslist.org/"},
+                            {"fort collins"=>"https://fortcollins.craigslist.org/"},
+                            {"macon"=>"https://macon.craigslist.org/"}] } 
+
+  let!(:states_cities_links_data){  {:Montana => [{"billings"=>"https://billings.craigslist.org/"},
+                                                  {"bozeman"=> "https://bozeman.craigslist.org/"},
+                                                  {"butte"=>"https://butte.craigslist.org/"}],
+                                    :Minnesota => [{"bemidji"=>"https://bemidji.craigslist.org/"},
+                                                  {"brainerd"=>"https://brainerd.craigslist.org/"},
+                                                  {"duluth"=>"https://duluth.craigslist.org/"}],
+                                   :"New Mexico" =>[{"albuquerque"=>"https://albuquerque.craigslist.org/"},
+                                                  {"clovis"=>"https://clovis.craigslist.org/"},
+                                                  {"farmington"=>"https://farmington.craigslist.org/"}]
+                                    }
+                                 }    
+
   def choose_random_state
     state_names[rand(0..state_names.length - 1)]
   end
-
-
 
   after(:each) do 
     CraigsList.class_variable_set(:@@all, [])
   end
   describe "#initialize" do
-    it "it has default values" do
+    it "it has default values, and visits the about page of craiglist to collect html" do
       cl_second = CraigsList.new()
 
       cl_second_site = cl_second.instance_variable_get(:@site_url)
@@ -40,10 +55,36 @@ RSpec.describe "CraigsList" do
   end
 
   describe "#get_states_names" do
-    it "it visits the about page of craiglist and collects all the states names of the U.S." do
+    it "it uses the doc getter to access html docucment, and collects all the states names of the U.S." do
       state_names = cl_first.get_states_names
       expect(state_names).to include(choose_random_state)
     end
   end
 
+  describe "#cities_and_links" do
+    it "it uses html scraped to collect cities and their links, test for three states." do
+    links = cl_first.send(:cities_and_links)
+    expect(links[0][0]).to include(cities_and_links_data[0])
+    expect(links[5][4]).to include(cities_and_links_data[1])
+    expect(links[10][6]).to include(cities_and_links_data[2])      
+    end
+  end
+
+  describe "#states_cities_links" do
+    it "it returns a hash at first level and hash has states as keys, then this hash points to array of hashes
+    every hash inside this array has a key for every city belonging to that state, and the value is the link to that city" do
+    links = cl_first.send(:states_cities_links)
+    expect(links[:Montana][0]).to include(states_cities_links_data[:Montana][0])
+    expect(links[:Montana][1]).to include(states_cities_links_data[:Montana][1])
+    expect(links[:Montana][2]).to include(states_cities_links_data[:Montana][2])
+    expect(links[:Minnesota][0]).to include(states_cities_links_data[:Minnesota][0])
+    expect(links[:Minnesota][1]).to include(states_cities_links_data[:Minnesota][1])
+    expect(links[:Minnesota][2]).to include(states_cities_links_data[:Minnesota][2])
+    expect(links[:"New Mexico"][0]).to include(states_cities_links_data[:"New Mexico"][0])
+    expect(links[:"New Mexico"][1]).to include(states_cities_links_data[:"New Mexico"][1])
+    expect(links[:"New Mexico"][2]).to include(states_cities_links_data[:"New Mexico"][2])
+    end
+  end
 end
+
+
