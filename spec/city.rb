@@ -25,10 +25,10 @@ RSpec.describe "City" do
   describe "#add_item" do
     it "it accpets an item, and adds it to @items instance variable for city, and it returns that item" do
       item = Item.new(first_phone)
-      city_item = first_city.add(item)
+      city_item = first_city.add_item(item)
       
       expect(first_city.items).to include(item)
-      expect(first_city.add(item)).to eq(city_item)
+      expect(first_city.add_item(item)).to eq(city_item)
     end
   end
 
