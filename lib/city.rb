@@ -9,4 +9,7 @@ class City
     @items = []
     @@all << self
   end
+
+  
+
 end
