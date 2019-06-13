@@ -20,11 +20,35 @@ class CLI
     puts "Please enter a number for the city you'd like to scrape.".colorize(:green)
     @city_scraped = convert_to_city(@state_scraped, gets.chomp)
     puts "You have chosen the state of #{@state_scraped}, and the city of #{@city_scraped.capitalize}."
-  end    
+  end  
+
+  def display_states
+    @scrape.get_states_names.each_with_index do |state, index|
+      print "#{index + 1}. #{state}    ".ljust(28) 
+      if (index + 1) % 5 == 0
+        print "\n"
+      end
+    end
+    print "\n"
+  end  
 
   def scrape_phones
     @scraped_city_url = @scrape.return_city_link(@state_scraped, @city_scraped)
     @phones = @scrape.scrape_by_city_url(@scraped_city_url)
+  end
+
+  def create_items_from_array(phones_array)
+    if phones_array.empty?
+      puts "Your search return zero hits, please scrape again"
+      get_menu_input
+      create_items_from_array(scrape_phones())
+    else
+      @city = City.new({:name => @city_scraped, :state => @state_scraped,
+                        :city_url => @scraped_city_url})
+      phones_array.each do |phone_info| 
+        @city.add_item(Item.new(phone_info))
+      end
+    end
   end
 
   def get_choice
