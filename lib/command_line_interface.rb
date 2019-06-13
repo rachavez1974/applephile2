@@ -43,6 +43,16 @@ class CLI
       end
     end
     print "\n"
+  end
+
+  def convert_to_state(state_number)
+    #it takes in a number and returns the corresponding state's name
+    @scrape.get_states_names[state_number.to_i - 1]
+  end
+
+  def convert_to_city(state, city_number)
+    #it takes in a number and returns the corresponding city's name
+      @state_cities[city_number.to_i - 1] 
   end 
 
   def scrape_phones
