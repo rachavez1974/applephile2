@@ -30,7 +30,20 @@ class CLI
       end
     end
     print "\n"
-  end  
+  end 
+
+  def display_cities(state)
+    @state_cities = @scrape.get_state_cities(state)
+    #find max length of city and use it left justify everything else for screen output
+    max_length = @state_cities.map(&:length).max
+    @state_cities.each_with_index do |city, index|
+      print "#{index + 1}. #{city.capitalize.ljust(max_length)}   " 
+      if (index + 1) % 3 == 0
+        print "\n"
+      end
+    end
+    print "\n"
+  end 
 
   def scrape_phones
     @scraped_city_url = @scrape.return_city_link(@state_scraped, @city_scraped)
