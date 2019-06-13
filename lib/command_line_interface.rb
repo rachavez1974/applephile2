@@ -79,6 +79,39 @@ class CLI
     end
   end
 
+  def display_phone_info(phones)
+    separator = "-+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+--+-+-+".colorize(:yellow)
+    puts "The following phones were found in accordance to your search parameters."
+    choice = ""
+    while choice != "exit"
+      phones.each_with_index do |phone, index|
+        puts "#{index + 1}: #{phone.description}"
+        puts "Price: $#{phone.price}"
+        puts "Phone's url: #{phone.url}"
+        puts "Phone's City: #{phone.city.name}"
+        puts separator
+
+        if (index + 1) % 5 == 0
+          # puts "Enter number to see link phone on browser.".colorize(:cyan)
+          # puts "next for more phones".colorize(:green)
+          # puts "Or enter exit to re-scrape.".colorize(:blue)
+
+          choice = get_choice
+          if choice == "next"
+            next
+          elsif choice == 'exit'
+            break
+          else
+            #make sure screen stays on all present create_items_from_array
+            phone_url = phones[choice.to_i - 1].url 
+            system("open", phone_url)
+              choice = get_choice
+          end
+        end
+      end  
+      puts "There are no moh phones to show."
+    end    
+  end
   def get_choice
     puts "Enter number to see link phone on browser.".colorize(:cyan)
     puts "next for more phones".colorize(:green)
