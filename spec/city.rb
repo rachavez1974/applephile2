@@ -7,8 +7,21 @@ RSpec.describe "City" do
   let!(:city_hash) {{:name => "clovis", :state => "New Mexico",
                     :city_url => scraped_city_url}}
   let!(:first_city) {City.new(city_hash)}  
-  let!(:phone_hash) {cl_first.scrape_by_city_url(scraped_city_url) }
-  let!(:first_phone) {phone_hash.first }
+  let!(:phone_array) {cl_first.scrape_by_city_url(scraped_city_url) }
+  let!(:first_phone) {phone_array.first }
+
+
+  
+  def add_items_to_city(city)
+    cl_second = CraigsList.new
+    phone_array_two = cl_second.scrape_by_city_url(city.city_url)
+    phone_array_two.each do |hash|
+      city.add_item(Item.new(hash))
+    end
+    city
+  end
+
+
 
   describe "#initialize" do
     it "accepts a hash of attributes to assign" do
@@ -32,8 +45,18 @@ RSpec.describe "City" do
     end
   end
 
-
-
+  describe "#get_phones_by_price" do
+    it "it accpets a price, if one not provided it defaults to 150, then it returns all
+      the items that are greater than or equals to that price" do
+      city_a_hash = {:name => "las vegas", :state => "Nevada",
+                      :city_url => "https://lasvegas.craigslist.org/"}
+      city_a = City.new(city_a_hash)
+      city_a = add_items_to_city(city_a)
+      length = city_a.items.length
+      expect(city_a.get_phones_by_price(200)[rand(0..length - 1)].price).to be >= 200
+      
+    end
+  end
 
 
 end
