@@ -22,6 +22,10 @@ class CLI
     puts "You have chosen the state of #{@state_scraped}, and the city of #{@city_scraped.capitalize}."
   end    
 
+  def scrape_phones
+    @scraped_city_url = @scrape.return_city_link(@state_scraped, @city_scraped)
+    @phones = @scrape.scrape_by_city_url(@scraped_city_url)
+  end
 
   def get_choice
     puts "Enter number to see link phone on browser.".colorize(:cyan)
