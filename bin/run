@@ -2,7 +2,7 @@
 
 # require "bundler/setup"
 # require "collector"
-#require_relative "../lib/command_line_interface.rb"
+# require_relative "../lib/command_line_interface.rb"
 require_relative '../config/environment'
 
 # You can add fixtures and/or initialization code here to make experimenting

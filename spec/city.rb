@@ -1,28 +1,63 @@
 require "spec_helper"
-require_relative '../lib/city.rb'
+require_relative "../lib/city.rb"
 
-RSpec.describe "City" do                  
-  let!(:bellingham) {City.new({:name=>"bellingham", :state=>"Washington",
-                                            :keyword => "iphone new brand new iphone",
-                                            :city_url => "www.google.com", :items => []})
-                    }
+RSpec.describe "City" do
+  let!(:cl_first) {CraigsList.new()}
+  let!(:scraped_city_url) {cl_first.return_city_link("New Mexico", "clovis") }
+  let!(:city_hash) {{:name => "clovis", :state => "New Mexico",
+                    :city_url => scraped_city_url}}
+  let!(:first_city) {City.new(city_hash)}  
+  let!(:phone_array) {cl_first.scrape_by_city_url(scraped_city_url) }
+  let!(:first_phone) {phone_array.first }
+
+
   
-  
-  after(:each) do 
-    City.class_variable_set(:@@all, [])
+  def add_items_to_city(city)
+    cl_second = CraigsList.new
+    phone_array_two = cl_second.scrape_by_city_url(city.city_url)
+    phone_array_two.each do |hash|
+      city.add_item(Item.new(hash))
+    end
+    city
   end
+
+
+
   describe "#initialize" do
-    it "takes in an argument of a hash and sets that new city's attributes using the key/value pairs of that hash." do
-      expect{City.new({:name => "jacksonville", :state => "Florida", 
-                       :keyword=>"new car barnd new car", 
-                       :city_url=>"www.city.com", :items=>[]})}.to_not raise_error
-
-      expect(bellingham.name).to eq("bellingham")
-      expect(bellingham.state).to eq("Washington")
-      expect(bellingham.keyword).to eq("iphone new brand new iphone")
-      expect(bellingham.city_url).to eq("www.google.com")
-      expect(bellingham.items).to match_array([])
-
+    it "accepts a hash of attributes to assign" do
+      city_one_name = first_city.instance_variable_get(:@name)
+      city_one_state = first_city.instance_variable_get(:@state)
+      city_one_url = first_city.instance_variable_get(:@city_url)
+      
+      expect(city_one_name).to eq("clovis")
+      expect(city_one_state).to eq("New Mexico")
+      expect(city_one_url).to eq("https://clovis.craigslist.org/")
     end
   end
+
+  describe "#add_item" do
+    it "it accpets an item, and adds it to @items instance variable for city, and it returns that item" do
+      item = Item.new(first_phone)
+      city_item = first_city.add_item(item)
+      
+      expect(first_city.items).to include(item)
+      expect(first_city.add_item(item)).to eq(city_item)
+    end
+  end
+
+  describe "#get_phones_by_price" do
+    it "it accpets a price, then it returns all
+      the items that are greater than or equals to that price" do
+      city_a_hash = {:name => "las vegas", :state => "Nevada",
+                      :city_url => "https://lasvegas.craigslist.org/"}
+      city_a = City.new(city_a_hash)
+      city_a = add_items_to_city(city_a)
+      length = city_a.get_phones_by_price(200).length
+      expect(city_a.get_phones_by_price(200)[rand(0..length - 1)].price).to be >= "200"
+      
+    end
+  end
+
+
 end
+
